@@ -245,8 +245,7 @@ public class wifiService extends Service {
                 .setContentTitle("Today's Wifi Usage")
                 .setOngoing(true)
                 .setPriority(5)
-                .setContentText("Downloaded: " +wnData/k1 +"."+temp1+" "+unitArray[b1])
-                .addAction(R.drawable.ic_replay_white_24dp,"REFRESH",pintent);
+                .setContentText("Downloaded: " +wnData/k1 +"."+temp1+" "+unitArray[b1]);
         if(flag == 0)
             builder.setSmallIcon(kbps_array[kbps]);
         else if(flag == 1)
