@@ -19,7 +19,11 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -41,15 +45,17 @@ public class wifiService extends Service {
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
     String initialDate,currentdate;
+    dataHolder data;
 
     int ch;
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public int onStartCommand(Intent intent, int flags, int startId){
         c = Calendar.getInstance();
         initialDate = df.format(c.getTime());
-        updatewpData();
+        //updatewpData();
         wPrevious = TrafficStats.getTotalRxBytes()-TrafficStats.getMobileRxBytes();
         wNow = wPrevious;
+        data = getDataHolder();
         startRun();
 
         return START_STICKY;
@@ -96,15 +102,18 @@ public class wifiService extends Service {
             currentdate = df.format(c.getTime());
             if(!Objects.equals(initialDate,currentdate)){
                 reset();
+                data = getDataHolder();
             }
-            if(refreshed)
-                updatewpData();
-            wnData = (TrafficStats.getTotalRxBytes()-TrafficStats.getMobileRxBytes())-wpData;
-            wnUploaded =(TrafficStats.getTotalTxBytes()-TrafficStats.getMobileTxBytes())-wpUploaded;
+           // if(refreshed)
+           //     updatewpData();
+            //wnData = (TrafficStats.getTotalRxBytes()-TrafficStats.getMobileRxBytes())-wpData;
+            //wnUploaded =(TrafficStats.getTotalTxBytes()-TrafficStats.getMobileTxBytes())-wpUploaded;
             updatewnData();
             wSpeed = wNow - wPrevious;
             wPrevious = wNow;
             wNow = TrafficStats.getTotalRxBytes()-TrafficStats.getMobileRxBytes();
+            data.wDownloaded += wSpeed;
+            wnData = data.wDownloaded;
             updateWifiNotification();
             handler.postDelayed(run,1000);
 
@@ -233,7 +242,7 @@ public class wifiService extends Service {
         Intent intentp = new Intent(this,wdRefresh.class);
         PendingIntent pintent = PendingIntent.getService(this,0,intentp,PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setContentTitle("Wifi Notification")
+                .setContentTitle("Today's Wifi Usage")
                 .setOngoing(true)
                 .setPriority(5)
                 .setContentText("Downloaded: " +wnData/k1 +"."+temp1+" "+unitArray[b1])
@@ -290,6 +299,23 @@ public class wifiService extends Service {
         startService(intent);
         Intent intent1 = new Intent(this,initialisationService.class);
         startService(intent1);
+    }
+
+    public dataHolder getDataHolder(){
+        ArrayList<dataHolder> data = new ArrayList<>();
+        try {
+            FileInputStream in = openFileInput("data");
+            ObjectInputStream ois = new ObjectInputStream(in);
+
+            data = (ArrayList<dataHolder>) ois.readObject();
+            ois.close();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return data.get(data.size()-1);
+
     }
 
 

@@ -47,28 +47,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-/*
-    public void remove(String name,String name2){
-        dataHolder d = new dataHolder();
-        d.a = name;
-        d.b = name2;
-        int i=0;
-        for(i = 0;i<10;i++){
-            dataHolder d1 = new dataHolder();
-            d1 = Data.get(i);
-            if(d1.a == d.a && d1.b == d.b){
-                Data.remove(i);
-                break;
-            }
-        }
+
+    public void remove(int i){
+
+        Data.remove(i);
+
         notifyItemRemoved(i);
 
 
     }
-*/
+
     public MyAdapter (ArrayList<dataHolder> myDataSet, int ch){
         Data = myDataSet;
         choice = ch;
+        for(int i = 0; i <Data.size();i++) {
+            dataHolder dhd = Data.get(i);
+            if (choice == 0) {
+                if (dhd.mDownloaded == 0) {
+                    Data.remove(i);
+                }
+
+
+            } else if (choice == 1) {
+                if (dhd.wDownloaded == 0) {
+                    Data.remove(i);
+                }
+
+            }
+        }
     }
 
     @Override
@@ -82,6 +88,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         dataHolder dhd;
         dhd = Data.get(position);
         int k1,k2,a=0,b1=0;
+
         double downloaded,uploaded;
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy");
@@ -95,21 +102,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(c.MONTH);
 
-            //Bitmap b = generateBitmap(dhd.date);
-            Bitmap bitmap = Bitmap.createBitmap(200,210, Bitmap.Config.ARGB_8888);
-            Paint paint = new Paint();
-            paint.setColor(Color.WHITE);
-            paint.setTextSize(120);
-            Canvas canvas = new Canvas(bitmap);
-            canvas.drawText(String.valueOf(day),10,90,paint);
-            paint.setColor(Color.CYAN);
-            paint.setTextSize(70);
-            canvas.drawText(week[dow-1],10,155,paint);
-            //holder.imageView.setImageBitmap(bitmap);
-            paint.setColor(Color.YELLOW);
-            paint.setTextSize(70);
-            canvas.drawText(Month[month-1],10,210,paint);
-            holder.imageView.setImageBitmap(bitmap);
+        //Bitmap b = generateBitmap(dhd.date);
+        Bitmap bitmap = Bitmap.createBitmap(200,210, Bitmap.Config.ARGB_8888);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(120);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawText(String.valueOf(day),10,90,paint);
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(70);
+        canvas.drawText(week[dow],10,155,paint);
+        //holder.imageView.setImageBitmap(bitmap);
+        paint.setColor(Color.RED);
+        paint.setTextSize(70);
+        canvas.drawText(Month[month],10,210,paint);
+        holder.imageView.setImageBitmap(bitmap);
 
         if (choice == 1) {
             unitDecider(dhd.wDownloaded);

@@ -12,6 +12,6 @@
 
         android:useLevel="true">
 
-        <solid android:color="#ffffff" />
+        <solid android:color="#ff0000" />
 
     </shape>

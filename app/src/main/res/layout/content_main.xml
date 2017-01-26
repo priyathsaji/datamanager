@@ -19,11 +19,11 @@
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="#1560B6"
+            card_view:cardBackgroundColor="#ffffff"
             card_view:cardCornerRadius="32dp"
             android:paddingBottom="15dp"
             android:elevation="20dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_marginTop="3sp">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +36,7 @@
                     android:text = "Nothing to show!! The data will come according to your usage"
                     android:textSize="20sp"
                     android:gravity="center_horizontal"
-                    android:textColor="#ffffff"/>
+                    android:textColor="#f73838"/>
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
@@ -45,27 +45,39 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/mCard"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="#082277"
+            card_view:cardBackgroundColor="#f8f9fa"
             card_view:cardCornerRadius="32dp"
             android:layout_centerHorizontal="true"
             android:paddingBottom="15dp"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:padding="6dip" >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:textColor="#ffffff"
+                    android:textColor="#082277"
                     android:text="Mobile Data Used"
                     android:layout_marginBottom="40dp"
                     android:textSize="30dp"/>
+
+                <ProgressBar
+
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="225dp"
+                    android:layout_height="225dp"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:layout_marginTop="30dp"
+                    android:progress="100"
+                    android:progressDrawable="@drawable/circular2" />
                 <ProgressBar
 
                     android:id="@+id/circular_progress_bar"
@@ -82,54 +94,39 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textSize="50dp"
-                    android:textColor="#ffffff"
+                    android:textColor="#000000"
                     android:id="@+id/mdownloaded"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="80dp"/>
+                    android:layout_marginTop="90dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MB"
                     android:textSize="40dp"
                     android:id="@+id/mUnit"
-                    android:textColor="#ffffff"
+                    android:textColor="#000000"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="135dp"
                     />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-
-        <android.support.v7.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/wCard"
-            android:layout_marginTop="250dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="#082277"
-            card_view:cardCornerRadius="32dp"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible">
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="6dip" >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:textColor="#ffffff"
+                    android:textColor="#082277"
                     android:text="Wifi Used"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginTop="250dp"
                     android:textSize="35dp"/>
+                <ProgressBar
+
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="225dp"
+                    android:layout_height="225dp"
+                    android:indeterminate="false"
+                    android:layout_marginTop="290dp"
+                    android:max="100"
+                    android:layout_centerHorizontal="true"
+                    android:progress="100"
+                    android:progressDrawable="@drawable/circular2" />
                 <ProgressBar
 
                     android:id="@+id/circular_progress_bar2"
@@ -137,33 +134,38 @@
                     android:layout_width="225dp"
                     android:layout_height="225dp"
                     android:indeterminate="false"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="290dp"
                     android:max="100"
                     android:layout_centerHorizontal="true"
                     android:progress="85"
                     android:progressDrawable="@drawable/circular" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textSize="50dp"
-                    android:textColor="#ffffff"
+                    android:textColor="#000000"
                     android:id="@+id/wdownloaded"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="80dp"/>
+                    android:layout_marginTop="350dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MB"
                     android:id="@+id/wUnit"
                     android:textSize="40dp"
-                    android:textColor="#ffffff"
+                    android:textColor="#000000"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="395dp"
                     />
+
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
+
+
+
 
         <android.support.v7.widget.RecyclerView
             android:id = "@+id/recyclerView"

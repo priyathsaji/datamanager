@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView.LayoutManager lManager;
     static int ch = 0;
     ArrayList<dataHolder> data = new ArrayList<>();
+    ArrayList<dataHolder> adapterdata;
     String [] Title = {"Mobile Data Usage","Wifi Data Usage"};
     GestureOverlayView gesture;
     GestureLibrary lb;
@@ -85,27 +86,27 @@ public class MainActivity extends AppCompatActivity
         rView.setLayoutManager(lManager);
         CardView cardView = (CardView)findViewById(R.id.card_view1);
         CardView mobile = (CardView)findViewById(R.id.mCard);
-        CardView wifi = (CardView)findViewById(R.id.wCard);
         data.clear();
         data = getDataHolder();
         if(data.size() != 0) {
             mobile.setVisibility(View.VISIBLE);
-            wifi.setVisibility(View.VISIBLE);
             cardView.setVisibility(View.INVISIBLE);
-        }
 
-        final ArrayList<dataHolder> temp = new ArrayList<>();
-        for(int i =0; i<(data.size());i++ ){
-            temp.add(data.get(i));
-        }
-        data.clear();
-        for(int i = (temp.size()-1);i >= 0;i--){
-            data.add(temp.get(i));
-        }
-        try {
-            Home();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+            final ArrayList<dataHolder> temp = new ArrayList<>();
+            for (int i = 0; i < (data.size()); i++) {
+                temp.add(data.get(i));
+            }
+            data.clear();
+            for (int i = (temp.size() - 1); i >= 0; i--) {
+                data.add(temp.get(i));
+            }
+
+            try {
+                Home();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -118,7 +119,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        MyAdapter mAdapter = new MyAdapter(data,ch);
+        adapterdata = new ArrayList<>();
+        for (int i = 0;i<(data.size()); i++) {
+            adapterdata.add(data.get(i));
+        }
+        MyAdapter mAdapter = new MyAdapter(adapterdata,ch);
+        //if(data.size()!=0)
         rView.setAdapter(mAdapter);
     }
 
@@ -249,44 +255,40 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.Home) {
-            Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-            toolbar.setTitle("Todays Usage");
-            setSupportActionBar(toolbar);
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.setDrawerListener(toggle);
-            toggle.syncState();
+            if(data.size()!=0) {
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                toolbar.setTitle("Todays Usage");
+                setSupportActionBar(toolbar);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                drawer.setDrawerListener(toggle);
+                toggle.syncState();
 
 
-            CardView mobile = (CardView)findViewById(R.id.mCard);
-            CardView wifi = (CardView)findViewById(R.id.wCard);
-            RecyclerView rview = (RecyclerView)findViewById(R.id.recyclerView);
-            rview.setVisibility(View.INVISIBLE);
-            mobile.setVisibility(View.VISIBLE);
-            wifi.setVisibility(View.VISIBLE);
-            try {
-                Home();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                CardView mobile = (CardView) findViewById(R.id.mCard);
+                RecyclerView rview = (RecyclerView) findViewById(R.id.recyclerView);
+                rview.setVisibility(View.INVISIBLE);
+                mobile.setVisibility(View.VISIBLE);
+                try {
+                    Home();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         } else if (id == R.id.Mobile_Data) {
             RecyclerView rview = (RecyclerView)findViewById(R.id.recyclerView);
             rview.setVisibility(View.VISIBLE);
             CardView mobile = (CardView)findViewById(R.id.mCard);
-            CardView wifi = (CardView)findViewById(R.id.wCard);
             mobile.setVisibility(View.INVISIBLE);
-            wifi.setVisibility(View.INVISIBLE);
             ch = 0;
             toogle();
         } else if (id == R.id.Wifi) {
             RecyclerView rview = (RecyclerView)findViewById(R.id.recyclerView);
             rview.setVisibility(View.VISIBLE);
             CardView mobile = (CardView)findViewById(R.id.mCard);
-            CardView wifi = (CardView)findViewById(R.id.wCard);
             mobile.setVisibility(View.INVISIBLE);
-            wifi.setVisibility(View.INVISIBLE);
             ch = 1;
             toogle();
 

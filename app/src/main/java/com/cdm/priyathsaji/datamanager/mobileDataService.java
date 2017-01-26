@@ -17,6 +17,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +44,7 @@ public class mobileDataService extends Service {
     Calendar c = Calendar.getInstance();
     SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     String initialDate,currentdate;
-
+    dataHolder data;
 
     @Nullable
         @Override
@@ -54,9 +57,13 @@ public class mobileDataService extends Service {
         public int onStartCommand(Intent intent, int flags, int startId){
             c = Calendar.getInstance();
             initialDate = df.format(c.getTime());
-            updatemdpData();
+            //updatemdpData();
             mdPrevious = TrafficStats.getMobileRxBytes();
             mdNow = mdPrevious;
+
+            data = getDataHolder();
+
+
             startRun();
 
             return START_STICKY;
@@ -100,15 +107,19 @@ public class mobileDataService extends Service {
                 currentdate = df.format(c.getTime());
                 if(!Objects.equals(initialDate,currentdate)){
                     reset();
+                    data = getDataHolder();
                 }
-                if(refreshed)
-                    updatemdpData();
-                mdnData = TrafficStats.getMobileRxBytes()-mdpData;
-                mnUploaded = TrafficStats.getMobileTxBytes() - mpUploaded;
-                updatemdnData();
+               // if(refreshed)
+               //     updatemdpData();
+                //mdnData = TrafficStats.getMobileRxBytes()-mdpData;
+               // mnUploaded = TrafficStats.getMobileTxBytes() - mpUploaded;
+                //updatemdnData();
                 mdSpeed = mdNow - mdPrevious;
                 mdPrevious = mdNow;
                 mdNow = TrafficStats.getMobileRxBytes();
+                data.mDownloaded+=mdSpeed;
+                mdnData = data.mDownloaded;
+
                 updateWifiNotification();
                 handler.postDelayed(run,1000);
 
@@ -128,9 +139,9 @@ public class mobileDataService extends Service {
                 editor.apply();
                 refreshed = false;
             }else{
-
                 mdpData = preferences.getLong("mdpData",0);
                 mpUploaded = preferences.getLong("mpUploaded",0);
+
             }
         }
         public void updatemdnData(){
@@ -243,11 +254,10 @@ public class mobileDataService extends Service {
 
             NotificationCompat.Builder builder = null;
             builder = new NotificationCompat.Builder(this)
-                    .setContentTitle("Mobile Data ")
+                    .setContentTitle("Today's Mobile Data Usage  ")
                     .setOngoing(true)
                     .setPriority(5)
-                    .setContentText("Downloaded: " + mdnData/k1+"."+temp1+" "+unitArray[b1])
-                    .addAction(R.drawable.ic_replay_white_24dp,"REFRESH",pintent);
+                    .setContentText("Downloaded: " + mdnData/k1+"."+temp1+" "+unitArray[b1]);
 
             if(flag == 0)
                 builder.setSmallIcon(kbps_array[kbps]);
@@ -302,6 +312,25 @@ public class mobileDataService extends Service {
         Intent intent1 = new Intent(this,initialisationService.class);
         startService(intent1);
     }
+
+
+    public dataHolder getDataHolder(){
+        ArrayList<dataHolder> data = new ArrayList<>();
+        try {
+            FileInputStream in = openFileInput("data");
+            ObjectInputStream ois = new ObjectInputStream(in);
+
+            data = (ArrayList<dataHolder>) ois.readObject();
+            ois.close();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return data.get(data.size()-1);
+
+    }
+
 
 
 
